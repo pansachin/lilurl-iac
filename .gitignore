@@ -1,0 +1,15 @@
+# Ignore terraform state files
+*.tfstate
+
+# Ignore the .terraform directory
+.terraform/
+
+# Ignore the .terraform.lock.hcl file
+.terraform.lock.hcl
+
+# Ignore the terraform.tfvars file
+terraform.tfvars
+.tfvars
+
+# Ignore vscode settings
+.vscode/
