@@ -1,0 +1,86 @@
+name: "Plan & Apply"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  plan:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform fmt
+        run: terraform fmt -check
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.IDF_PROVIDER }}
+          service_account: ${{ env.CI_SERVICE_ACCOUNT}}
+          audience: ${{ env.WORKLOAD_IDF_AUDIENCE}}
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan
+        run: terraform plan >> $GITHUB_STEP_SUMMARY
+
+  apply:
+    runs-on: ubuntu-20.04
+    needs: plan
+    environment: "apply"
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform fmt
+        run: terraform fmt -check
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.IDF_PROVIDER }}
+          service_account: ${{ env.CI_SERVICE_ACCOUNT}}
+          audience: ${{ env.WORKLOAD_IDF_AUDIENCE}}
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan
+        run: terraform plan >> $GITHUB_STEP_SUMMARY
+      
+      - name: Terraform apply
+        if: github.event == 'push'
+        run: terraform apply -auto-aprove
