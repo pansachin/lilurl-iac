@@ -30,9 +30,9 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           token_format: access_token
-          workload_identity_provider: ${{ env.IDF_PROVIDER }}
-          service_account: ${{ env.CI_SERVICE_ACCOUNT}}
-          audience: ${{ env.WORKLOAD_IDF_AUDIENCE}}
+          workload_identity_provider: ${{ vars.IDF_PROVIDER }}
+          service_account: ${{ vars.CI_SERVICE_ACCOUNT}}
+          audience: ${{ vars.WORKLOAD_IDF_AUDIENCE}}
 
       - name: Terraform init
         run: terraform init
