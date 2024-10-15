@@ -49,7 +49,7 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: echo "plan_log=$(terraform plan -no-color)" >> $GITHUB_OUTPUT
+        run: echo "plan_log=$((terraform plan -no-color))" >> $GITHUB_OUTPUT
         env:
           TF_VAR_project_id: ${{ vars.TF_VAR_PROJECT_ID }}
           TF_VAR_region: ${{ vars.TF_VAR_REGION }}
