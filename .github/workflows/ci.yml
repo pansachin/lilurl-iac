@@ -49,21 +49,22 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: echo "plan_log=$((terraform plan -no-color))" >> $GITHUB_OUTPUT
+        run: terraform plan -no-color
         env:
           TF_VAR_project_id: ${{ vars.TF_VAR_PROJECT_ID }}
           TF_VAR_region: ${{ vars.TF_VAR_REGION }}
           TF_VAR_zone: ${{ vars.TF_VAR_ZONE }}
           TF_VAR_bucket_name: ${{ vars.TF_VAR_BUCKET_NAME }}
 
-      # - run: echo ${{ steps.plan.outputs.stdout }}
-      # - run: echo ${{ steps.plan.outputs.stderr }}
-      # - run: echo ${{ steps.plan.outputs.exitcode }}
+      - run: echo ${{ steps.plan.outputs.stdout }}
+        continue-on-error: true
+      - run: echo ${{ steps.plan.outputs.stderr }}
+      - run: echo ${{ steps.plan.outputs.exitcode }}
 
       - uses: actions/github-script@v7
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.plan_log }}"
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
