@@ -7,14 +7,8 @@ resource "google_service_account" "ci-terraform" {
 }
 
 resource "google_service_account_iam_member" "lilurl-iac-wiu" {
-  for_each = toset([
-    "roles/iam.workloadIdentityUser",
-    # "roles/iam.serviceAccountOpenIdTokenCreator",
-    # "roles/iam.serviceAccountTokenCreator"
-  ])
-
   service_account_id = google_service_account.ci-terraform.name
-  role               = each.value
+  role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/projects/564701988502/locations/global/workloadIdentityPools/github-wif/attribute.repository/pansachin/lilurl-iac"
 }
 
@@ -24,7 +18,7 @@ resource "google_project_iam_member" "project-owner" {
   member  = "serviceAccount:${google_service_account.ci-terraform.email}"
 }
 
-# service account for service deployment
+# service account for lilurl service deployment
 resource "google_service_account" "ci-lilurl" {
   account_id   = "ci-lilurl"
   display_name = "ci-lilurl"
@@ -33,13 +27,8 @@ resource "google_service_account" "ci-lilurl" {
 }
 
 resource "google_service_account_iam_member" "lilurl-wiu" {
-  for_each = toset([
-    "roles/iam.workloadIdentityUser",
-    # "roles/iam.serviceAccountOpenIdTokenCreator",
-    # "roles/iam.serviceAccountTokenCreator"
-  ])
   service_account_id = google_service_account.ci-lilurl.name
-  role               = each.value
+  role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/projects/564701988502/locations/global/workloadIdentityPools/github-wif/attribute.repository/pansachin/lilurl"
 }
 
