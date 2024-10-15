@@ -123,7 +123,6 @@ jobs:
   apply:
     if: github.event_name == 'push'
     runs-on: ubuntu-20.04
-    needs: plan
     permissions:
       contents: read
       id-token: write
