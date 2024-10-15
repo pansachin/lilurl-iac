@@ -13,9 +13,9 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
       - name: Checkout
@@ -99,7 +99,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
