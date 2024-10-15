@@ -120,9 +120,9 @@ jobs:
             }
 
   apply:
+    if: github.event == 'push'
     runs-on: ubuntu-20.04
     needs: plan
-    environment: "apply"
     permissions:
       contents: read
       id-token: write
@@ -156,9 +156,13 @@ jobs:
 
       - name: Terraform plan
         run: terraform plan -no-color
+        env:
+          TF_VAR_project_id: ${{ vars.TF_VAR_PROJECT_ID }}
+          TF_VAR_region: ${{ vars.TF_VAR_REGION }}
+          TF_VAR_zone: ${{ vars.TF_VAR_ZONE }}
+          TF_VAR_bucket_name: ${{ vars.TF_VAR_BUCKET_NAME }}
       
       - name: Terraform apply
-        if: github.event == 'push'
         run: terraform apply -auto-aprove
         env:
           TF_VAR_project_id: ${{ vars.TF_VAR_PROJECT_ID }}
