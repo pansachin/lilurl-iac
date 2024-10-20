@@ -36,8 +36,6 @@ resource "google_project_iam_member" "lilurl-access" {
   for_each = toset([
     "roles/compute.admin",
     "roles/artifactregistry.writer",
-    "roles/iam.serviceAccountOpenIdTokenCreator",
-    "roles/iam.serviceAccountTokenCreator"
   ])
 
   project = var.project_id
