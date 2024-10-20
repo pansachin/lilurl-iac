@@ -14,9 +14,6 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    # defaults:
-    #   run:
-    #     working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
       - name: Checkout
