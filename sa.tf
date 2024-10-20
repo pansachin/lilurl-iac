@@ -33,7 +33,12 @@ resource "google_service_account_iam_member" "lilurl-wiu" {
 }
 
 resource "google_project_iam_member" "lilurl-access" {
+  for_each = toset([
+    "roles/compte.admin",
+    "roles/artifactregistry.writer",
+  ])
+
   project = var.project_id
-  role    = "roles/compute.admin"
+  role    = each.value
   member  = "serviceAccount:${google_service_account.ci-lilurl.email}"
 }
